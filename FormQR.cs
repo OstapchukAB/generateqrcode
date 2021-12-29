@@ -1,71 +1,65 @@
 ﻿using QRCoder;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GenerateQRcode
 {
     public partial class FormQR : Form
     {
-        Bitmap qrCodeImage;
-        Bitmap resultImage;
+        Bitmap QrCodeImage { get; set; }
+        Bitmap ResultImage { get; set; }
+        const int WITH_BITMAP = 550;
+        const int HEIGH_BITMAP = 550;
+        const int DELTA_IMAGES = 100;
+        const int DELTA_X_TEXT = 40;
+        const int DELTA_Y_TEXT = HEIGH_BITMAP;
+        const int WITH_TEXT = WITH_BITMAP;
+        const int HEIGH_TEXT = 60;
+        const int SIZE_SIGNATURES = 38;
+        const int PAGE_WITH = 2100;
+        const int PAGE_HEIGH = 2970;
+        const int IMAGES_CNTS_FOR_HEIGH = 4;
+        const int IMAGES_CNTS_FOR_WITH = 3;
+        const int CNTS_IMAGES = 12;
+        List<QrTxt> LstQrTxt { get; set; }=new List<QrTxt>();
         public FormQR()
         {
             InitializeComponent();
             pictureBoxQR.SizeMode = PictureBoxSizeMode.Zoom;
-            //pictureBoxQR.
         }
 
         private void buttonQRcreate_Click(object sender, EventArgs e)
         {
-            _QRGenerate();
+            QRGenerate();
         }
 
-        void _QRGenerate()
+        void QRGenerate()
         {
-            string txt = "";
-            qrCodeImage = null;
+            var filename = $"{richTextBoxStrinfForQR.Text}.bmp";
+            QrCodeImage = null;
 
             if (richTextBoxStrinfForQR.Text != null && richTextBoxStrinfForQR.Text.Length > 0)
             {
-                txt = richTextBoxStrinfForQR.Text;
+                var txt = richTextBoxStrinfForQR.Text;
 
                 QRCodeGenerator qrGenerator = new QRCodeGenerator();
                 QRCodeData qrCodeData = qrGenerator.CreateQrCode(txt, QRCodeGenerator.ECCLevel.Q);
                 QRCode qrCode = new QRCode(qrCodeData);
-                qrCodeImage = qrCode.GetGraphic(20);
+                QrCodeImage = qrCode.GetGraphic(20);
 
-                int _cnts_images = 12;
-                List<Bitmap> lstBitmap = new List<Bitmap>(_cnts_images);
-                List<string> lstTxt = new List<string>(_cnts_images);
-                for (int i = 0; i < _cnts_images; i++) 
+                List<Bitmap> lstBitmap = new List<Bitmap>(CNTS_IMAGES);
+               
+                for (int i = 0; i < CNTS_IMAGES; i++) 
                 {
-                    lstBitmap.Add(qrCodeImage);
-                    lstTxt.Add($"OMZ_PRI_HP_00{i}");
+                    LstQrTxt.Add(new QrTxt(filename, $"OMZ_PRI_HP_00{i}",txt));   
+                    lstBitmap.Add(QrCodeImage);
                 
                 }
-
-                int w_img = 550;
-                int h_img = 550;
-                int delta_images = 100;
-                int delta_x_text = 40;
-                int delta_y_text = h_img;
-                int w_text = w_img;
-                int h_text = 60;
-                int size_txt = 38;
-                int page_w = 2100;
-                int page_h = 2970;
-                int h_cnts_images = 4;
-                int w_cnts_images = 3;
-                using (Bitmap bmp = new Bitmap(page_w, page_h))
+                using (Bitmap bmp = new Bitmap(PAGE_WITH, PAGE_HEIGH))
                 {
                    
                     using (Graphics g = Graphics.FromImage(bmp))
@@ -76,19 +70,19 @@ namespace GenerateQRcode
                         g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
                         int idx = 0;
-                        int delta_img_x = w_img+delta_images;
-                        for (int i = 0; i < w_cnts_images; i++)
+                        int delta_img_x = WITH_BITMAP+DELTA_IMAGES;
+                        for (int i = 0; i < IMAGES_CNTS_FOR_WITH; i++)
                         {
-                            int delta_img_y = h_img+delta_images;
-                            for (int j = 0; j < h_cnts_images; j++)
+                            int delta_img_y = HEIGH_BITMAP+DELTA_IMAGES;
+                            for (int j = 0; j < IMAGES_CNTS_FOR_HEIGH; j++)
                             {
                                 int x = i * delta_img_x;
                                 int y = j * delta_img_y;
-                                g.DrawImage(lstBitmap[idx], x, y, w_img, h_img);
-                                g.DrawString(lstTxt[idx], 
-                                    new Font("Tahoma", size_txt),
+                                g.DrawImage(lstBitmap[idx], x, y, WITH_BITMAP, HEIGH_BITMAP);
+                                g.DrawString(LstQrTxt[idx].Signatures, 
+                                    new Font("Tahoma", SIZE_SIGNATURES),
                                     Brushes.Black,
-                                    new RectangleF(x+delta_x_text, y+delta_y_text, w_text, h_text));
+                                    new RectangleF(x+DELTA_X_TEXT, y+DELTA_Y_TEXT, WITH_TEXT, HEIGH_TEXT));
                                 idx++;
                             }
 
@@ -97,19 +91,36 @@ namespace GenerateQRcode
                         g.Flush();
 
                     }
-                    resultImage = new Bitmap(bmp);
+                    ResultImage = new Bitmap(bmp);
                 }
 
-                pictureBoxQR.Image = resultImage;
+                pictureBoxQR.Image = ResultImage;
             }
         }
 
         private void buttonSaveQR_Click(object sender, EventArgs e)
         {
-            if (resultImage != null) {
-                resultImage.Save($"{richTextBoxStrinfForQR.Text}.bmp");
+            if (ResultImage != null) {
+                ResultImage.Save($"{richTextBoxStrinfForQR.Text}.bmp");
             
             }
         }
+
+        
     }
+    public class QrTxt
+    {
+        public QrTxt(string fname, string signatures, string txt)
+        {
+            Fname = fname;
+            Signatures = signatures;
+            LargeText = txt;
+        }
+
+        public string Fname { get; private set; }
+        public string Signatures { get; private set; }
+        public string LargeText { get; private set; }
+
+    }
+
 }
