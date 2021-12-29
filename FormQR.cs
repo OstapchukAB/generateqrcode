@@ -101,7 +101,7 @@ namespace GenerateQRcode
         private void buttonSaveQR_Click(object sender, EventArgs e)
         {
             if (ResultImage != null) {
-                ResultImage.Save($"{richTextBoxStrinfForQR.Text}.bmp");
+                ResultImage.Save($"QR_CODE_{DateTime.Now.ToString("yyyyddMM_HHmmss",null)}.bmp");
             
             }
         }
