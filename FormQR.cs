@@ -43,29 +43,28 @@ namespace GenerateQRcode
                 QRCode qrCode = new QRCode(qrCodeData);
                 qrCodeImage = qrCode.GetGraphic(20);
 
-                int cnts = 12;
-                List<Bitmap> lstBitmap = new List<Bitmap>(cnts);
-                List<string> lstTxt = new List<string>(cnts);
-                for (int i = 0; i < cnts; i++) 
+                int _cnts_images = 12;
+                List<Bitmap> lstBitmap = new List<Bitmap>(_cnts_images);
+                List<string> lstTxt = new List<string>(_cnts_images);
+                for (int i = 0; i < _cnts_images; i++) 
                 {
                     lstBitmap.Add(qrCodeImage);
                     lstTxt.Add($"OMZ_PRI_HP_00{i}");
                 
                 }
 
-                //int x_img = 0;
-                //int delta_x_img = 650;
-                //int delta_y_img=
-                //int y_img = 0;
                 int w_img = 550;
                 int h_img = 550;
+                int delta_images = 100;
                 int delta_x_text = 40;
-                int delta_y_text = 550;
+                int delta_y_text = h_img;
                 int w_text = w_img;
                 int h_text = 60;
                 int size_txt = 38;
                 int page_w = 2100;
                 int page_h = 2970;
+                int h_cnts_images = 4;
+                int w_cnts_images = 3;
                 using (Bitmap bmp = new Bitmap(page_w, page_h))
                 {
                    
@@ -77,11 +76,11 @@ namespace GenerateQRcode
                         g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
                         int idx = 0;
-                        int delta_img_x = 650;
-                        for (int i = 0; i < 3; i++)
+                        int delta_img_x = w_img+delta_images;
+                        for (int i = 0; i < w_cnts_images; i++)
                         {
-                            int delta_img_y = 650;
-                            for (int j = 0; j < 4; j++)
+                            int delta_img_y = h_img+delta_images;
+                            for (int j = 0; j < h_cnts_images; j++)
                             {
                                 int x = i * delta_img_x;
                                 int y = j * delta_img_y;
