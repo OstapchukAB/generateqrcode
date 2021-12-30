@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace GenerateQRcode
@@ -30,9 +31,11 @@ namespace GenerateQRcode
         public string Owner { get; private set; }
         public string Date { get; set; }
 
-        internal  FilesStructures ParseRow(string row)
+        internal FilesStructures ParseRow(string row)
         {
-            var columns = row.Split(',');
+            string patern = ",(?=(?:[^']*'[^']*')*[^']*$)";
+            row = row.Replace("\"", "'");
+            var columns = Regex.Split(row, patern).Where(s => !string.IsNullOrEmpty(s)).ToArray(); ;
             return new FilesStructures()
             {
                 Article =  columns[0],
