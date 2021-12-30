@@ -61,7 +61,7 @@ namespace GenerateQRcode
 
                 ResultImage = null;
 
-                //прочтем всю очередь по 12 подходов
+                //прочтем всю очередь по 12 подходов или пока очередь не закончится
                 while (queueRows.Count > 0)
                 {
                     var qrA4 = new QRCodes();
