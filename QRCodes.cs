@@ -23,7 +23,7 @@ namespace GenerateQRcode
         const int IMAGES_CNTS_FOR_HEIGH = 4;
         const int IMAGES_CNTS_FOR_WITH = 3;
         public const int CNTS_IMAGES_MAX = IMAGES_CNTS_FOR_HEIGH * IMAGES_CNTS_FOR_WITH;
-        public List<QrTxt> LstQrcodesTxts { get; private set; } = new List<QrTxt>(CNTS_IMAGES_MAX);
+        public List<QrTxt> LstQrcodesTxts { get; set; } =new List<QrTxt>();
 
        
 
@@ -32,6 +32,7 @@ namespace GenerateQRcode
         {
             if (qrTxts.Count == 0 || qrTxts.Count > CNTS_IMAGES_MAX)
                 return;
+            //LstQrcodesTxts  = new List<QrTxt>(qrTxts.Count);
             this.LstQrcodesTxts = qrTxts;
         }
 
@@ -71,10 +72,10 @@ namespace GenerateQRcode
 
                     int idx = 0;
                     int delta_img_x = WITH_BITMAP + DELTA_IMAGES;
-                    for (int i = 0; i < IMAGES_CNTS_FOR_WITH; i++)
+                    for (int i = 0; i < IMAGES_CNTS_FOR_WITH && idx< LstQrcodesTxts.Count; i++)
                     {
                         int delta_img_y = HEIGH_BITMAP + DELTA_IMAGES;
-                        for (int j = 0; j < IMAGES_CNTS_FOR_HEIGH; j++)
+                        for (int j = 0; j < IMAGES_CNTS_FOR_HEIGH && idx < LstQrcodesTxts.Count; j++)
                         {
                             int x = i * delta_img_x;
                             int y = j * delta_img_y;
