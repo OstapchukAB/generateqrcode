@@ -28,6 +28,7 @@ namespace GenerateQRcode
         public string SN { get; private set; }
         public string IN { get; private set; }
         public string Owner { get; private set; }
+        public string Date { get; set; }
 
         internal  FilesStructures ParseRow(string row)
         {
@@ -40,7 +41,8 @@ namespace GenerateQRcode
                 Model =    columns[3],
                 SN =       columns[4],
                 IN =       columns[5],
-                Owner =    columns[6]
+                Owner =    columns[6],
+                Date = DateTime.Now.ToString("D"),
             };
         }
     }

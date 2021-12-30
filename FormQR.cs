@@ -52,7 +52,8 @@ namespace GenerateQRcode
                                 lstTxt[i].SN,
                                 lstTxt[i].IN,
                                 lstTxt[i].Provider,
-                                lstTxt[i].Owner
+                                lstTxt[i].Owner,
+                                lstTxt[i].Date
                                 );
                             qrA4.LstQrcodesTxts.Add(new QrTxt(lstTxt[i].Article, text));
                         }
