@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace GenerateQRcode
 {
@@ -33,7 +31,7 @@ namespace GenerateQRcode
 
         internal FilesStructures ParseRow(string row)
         {
-            string patern = ",(?=(?:[^']*'[^']*')*[^']*$)";
+            string patern = @",(?=(?:[^']*'[^']*')*[^']*$)";
             row = row.Replace("\"", "'");
             var columns = Regex.Split(row, patern).Where(s => !string.IsNullOrEmpty(s)).ToArray(); ;
             return new FilesStructures()
