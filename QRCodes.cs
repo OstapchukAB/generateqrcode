@@ -13,16 +13,16 @@ namespace GenerateQRcode
         const int WITH_BITMAP = 550;
         const int HEIGH_BITMAP = 550;
         const int DELTA_IMAGES = 100;
-        const int DELTA_X_TEXT = 40;
-        const int DELTA_Y_TEXT = HEIGH_BITMAP;
-        const int WITH_TEXT = WITH_BITMAP;
-        const int HEIGH_TEXT = 60;
-        const int SIZE_SIGNATURES = 38;
+        const int DELTA_X_SIGNATURES = 60;
+        const int DELTA_Y_SIGNATURES = HEIGH_BITMAP-40;
+        const int WITH_SIGNATURES = WITH_BITMAP;
+        const int HEIGH_SIGNATURES = 60;
+        const int SIZE_SIGNATURES = 30;
         const int PAGE_WITH = 2100;
         const int PAGE_HEIGH = 2970;
         const int IMAGES_CNTS_FOR_HEIGH = 4;
         const int IMAGES_CNTS_FOR_WITH = 3;
-        public const int CNTS_IMAGES_MAX = 12;
+        public const int CNTS_IMAGES_MAX = IMAGES_CNTS_FOR_HEIGH * IMAGES_CNTS_FOR_WITH;
         public List<QrTxt> LstQrcodesTxts { get; private set; } = new List<QrTxt>(CNTS_IMAGES_MAX);
 
        
@@ -82,7 +82,7 @@ namespace GenerateQRcode
                             g.DrawString(LstQrcodesTxts[idx].Signatures,
                                 new Font("Tahoma", SIZE_SIGNATURES),
                                 Brushes.Black,
-                                new RectangleF(x + DELTA_X_TEXT, y + DELTA_Y_TEXT, WITH_TEXT, HEIGH_TEXT));
+                                new RectangleF(x + DELTA_X_SIGNATURES, y + DELTA_Y_SIGNATURES, WITH_SIGNATURES, HEIGH_SIGNATURES));
                             idx++;
                         }
                     }
@@ -97,14 +97,14 @@ namespace GenerateQRcode
 
     public class QrTxt
     {
-        public QrTxt(string fname, string signatures, string txt)
+        public QrTxt(string signatures, string txt)
         {
-            Fname = fname;
+            //Fname = fname;
             Signatures = signatures;
             LargeText = txt;
         }
 
-        public string Fname { get; private set; }
+        //public string Fname { get; private set; }
         public string Signatures { get; private set; }
         public string LargeText { get; private set; }
 
