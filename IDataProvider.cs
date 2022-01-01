@@ -5,8 +5,8 @@ namespace GenerateQRcode
     interface IDataProvider
     {
         bool SourceDataProviderReady();
-        List<string> GetData();
-        List<DataStructure> ParsingData();
+        bool GetData();
+        List<DataStructureEntity> ParsingData();
        
 
     }

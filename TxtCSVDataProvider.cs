@@ -10,7 +10,9 @@ namespace GenerateQRcode
 
     {
         string PathFile { get; set; }
-        public List<string> LstStringData { get; set; }
+        public List<string> LstStringData { get; set; } = new List<string>();
+
+       
 
         public TxtCSVDataProvider(string PathFile)
         {
@@ -26,24 +28,25 @@ namespace GenerateQRcode
                 return false;
         }
 
-        List<string> IDataProvider.GetData()
+        bool IDataProvider.GetData()
         {
-            return File.ReadAllLines(PathFile)
+           LstStringData= File.ReadAllLines(PathFile)
                .Skip(1)
                .Where(row => row.Length > 0)
                .ToList();
+            return true;
         }
 
-        List<DataStructure> IDataProvider.ParsingData()
+        List<DataStructureEntity> IDataProvider.ParsingData()
         {
             string patern = @",(?=(?:[^']*'[^']*')*[^']*$)";
 
 
             var lststringData = LstStringData.Select(x => Regex.Split(x.Replace("\"", "'"), patern));
-            List<DataStructure> data = new List<DataStructure>();
+            List<DataStructureEntity> data = new List<DataStructureEntity>();
             foreach (var columns in lststringData)
             {
-                data.Add(new DataStructure
+                data.Add(new DataStructureEntity
                 {
 
                     Article = columns[0],
@@ -58,9 +61,10 @@ namespace GenerateQRcode
                 });
             }
 
-            return new List<DataStructure>();
+            return data;
         }
-              
+
+       
     }
 
 

@@ -112,4 +112,6 @@ namespace GenerateQRcode
     }
 
 
+
+
 }

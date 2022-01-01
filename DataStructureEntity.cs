@@ -2,7 +2,7 @@
 
 namespace GenerateQRcode
 {
-    public class DataStructure
+    public class DataStructureEntity
     {
         public string Article { get; set; }
         public string Group { get; set; }
@@ -13,7 +13,7 @@ namespace GenerateQRcode
         public string Owner { get; set; }
         public string Date { get; set; }
     }
-    public class ReturnDataForQR {
+    public class DataStructureQR {
         public Bitmap ResultImage { get; set; }
         public string Filename { get; set; }
 
