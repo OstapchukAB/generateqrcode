@@ -116,6 +116,7 @@
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FormQR";
             this.Text = "Create QR";
+            this.Load += new System.EventHandler(this.FormQR_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQR)).EndInit();
             this.groupBoxForPictureBox.ResumeLayout(false);
             this.ResumeLayout(false);

@@ -37,7 +37,16 @@ namespace GenerateQRcode
             {
                 try
                 {
-                    CreateQRFromTxt(openFile.FileName);                   
+                    QRDataProcessor qrDataProcessor = new QRDataProcessor();
+                    IDataProvider dataProvider = new TxtCSVDataProvider(openFile.FileName);
+                    IDataProcessor dataProcessor = qrDataProcessor;
+                    if (dataProcessor.ProcessDataStart(dataProvider))
+                    {
+
+                        dataProcessor.ProcessData(dataProvider);
+                        //qrDataProcessor.LstStringParsingData;
+                    }
+                    //CreateQRFromTxt(openFile.FileName);                   
                 }
                 catch (Exception ex)
                 {
@@ -51,45 +60,45 @@ namespace GenerateQRcode
 
         }
 
-        void CreateQRFromTxt(string filePath) 
+        void CreateQRFromTxt(string filePath)
         {
-      
-                var lstLargeTxt = new LoadTxtFromFile().ReadFromCSV(filePath);
-                var queueRows = new Queue<FilesStructures>();
-                foreach (var v in lstLargeTxt)
-                    queueRows.Enqueue(v);
 
-                ResultImage = null;
+            var lstLargeTxt = new LoadTxtFromFile().ReadFromCSV(filePath);
+            var queueRows = new Queue<FilesStructures>();
+            foreach (var v in lstLargeTxt)
+                queueRows.Enqueue(v);
 
-                //прочтем всю очередь по 12 подходов или пока очередь не закончится
-                while (queueRows.Count > 0)
+            ResultImage = null;
+
+            //прочтем всю очередь по 12 подходов или пока очередь не закончится
+            while (queueRows.Count > 0)
+            {
+                var qrA4 = new QRCodes();
+                for (int i = 0; i < QRCodes.CNTS_IMAGES_MAX && queueRows.Count > 0; i++)
                 {
-                    var qrA4 = new QRCodes();
-                    for (int i = 0; i < QRCodes.CNTS_IMAGES_MAX && queueRows.Count>0; i++)
-                    {
-                        FilesStructures _row = queueRows.Dequeue();
-                        var text = string
-                            .Join("\n",
-                                      _row.Article,
-                                      _row.Group,
-                                      _row.Model,
-                                      _row.SN,
-                                      _row.IN,
-                                      _row.Provider,
-                                      _row.Owner,
-                                      _row.Date
-                            );
-                        qrA4.LstQrcodesTxts.Add(new QrTxt(_row.Article, text));
-                    }
-                    ResultImage = qrA4.QRGenerate();
-                    if (ResultImage != null)
-                    {
-                       //pictureBoxQR.Image = ResultImage;
-                        Filename = $"QR_CODE_{DateTime.Now.ToString("yyyyddMM_HHmmss_fff", null)}.bmp";
-                        ResultImage.Save(Filename);
-                    }
+                    FilesStructures _row = queueRows.Dequeue();
+                    var text = string
+                        .Join("\n",
+                                  _row.Article,
+                                  _row.Group,
+                                  _row.Model,
+                                  _row.SN,
+                                  _row.IN,
+                                  _row.Provider,
+                                  _row.Owner,
+                                  _row.Date
+                        );
+                    qrA4.LstQrcodesTxts.Add(new QrTxt(_row.Article, text));
                 }
-                
+                ResultImage = qrA4.QRGenerate();
+                if (ResultImage != null)
+                {
+                    //pictureBoxQR.Image = ResultImage;
+                    Filename = $"QR_CODE_{DateTime.Now.ToString("yyyyddMM_HHmmss_fff", null)}.bmp";
+                    ResultImage.Save(Filename);
+                }
+            }
+
         }
 
 
@@ -108,6 +117,10 @@ namespace GenerateQRcode
 
         }
 
+        private void FormQR_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 
 
