@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace GenerateQRcode
+﻿namespace GenerateQRcode
 {
     public class DataStructureEntity
     {
@@ -13,10 +11,5 @@ namespace GenerateQRcode
         public string Owner { get; set; }
         public string Date { get; set; }
     }
-    public class DataStructureQR {
-        public Bitmap ResultImage { get; set; }
-        public string Filename { get; set; }
-
-
-    }
+   
 }

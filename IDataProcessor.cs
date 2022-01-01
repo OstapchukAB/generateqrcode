@@ -1,15 +1,9 @@
-﻿using System.Collections.Generic;
-
-namespace GenerateQRcode
+﻿namespace GenerateQRcode
 {
     interface  IDataProcessor
     {
-
-        //void ProcessData(IDataProvider dataProvider);
-        bool ProcessDataSuccess(bool eof);
         bool ProcessDataStart(IDataProvider dataProvider);
+        bool ProcessCreateQR();
 
-        List<DataStructureQR> ProcessCreateQR(List<DataStructureEntity> dataStructures);
-       
     }
 }

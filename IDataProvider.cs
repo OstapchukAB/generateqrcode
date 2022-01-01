@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-
-namespace GenerateQRcode
+﻿namespace GenerateQRcode
 {
     interface IDataProvider
     {
         bool SourceDataProviderReady();
         bool GetData();
-        List<DataStructureEntity> ParsingData();
-       
-
+        bool ParsingData();
     }
 }

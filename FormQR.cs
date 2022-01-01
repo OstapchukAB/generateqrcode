@@ -9,7 +9,7 @@ namespace GenerateQRcode
     {
         Bitmap ResultImage { get; set; }
         string Filename { get; set; }
-        List<DataStructureQR> DataStructureQR { get; set; }
+
         public FormQR()
         {
             InitializeComponent();
@@ -38,25 +38,17 @@ namespace GenerateQRcode
             {
                 try
                 {
-                    // QRDataProcessor qrDataProcessor = new QRDataProcessor();
-                    IDataProcessor dataProcessor = new QRDataProcessor();
-                    IDataProvider dataProvider = new TxtCSVDataProvider(openFile.FileName);
+                    var csv = new CSVDataProvider(openFile.FileName);
+                    IDataProvider dataProvider = csv;
+                    IDataProcessor dataProcessor = csv;
 
                     if (dataProcessor.ProcessDataStart(dataProvider))
-                    {
                         if (dataProvider.GetData())
-                        {
-                            var resultParsing = dataProvider.ParsingData();
-                            if (resultParsing != null)
-                            {
-                                DataStructureQR = dataProcessor.ProcessCreateQR(resultParsing);
-                                if (DataStructureQR != null)
-                                    foreach (var dt in DataStructureQR)
-                                        dt.ResultImage.Save(dt.Filename);
-                            }
-                        }
-                    }
-              
+                            if (dataProvider.ParsingData())
+                                if (dataProcessor.ProcessCreateQR())
+                                    if (csv.LstStructureQRs != null)
+                                        foreach (var dt in csv.LstStructureQRs)
+                                            dt.ResultImage.Save(dt.Filename);
                 }
                 catch (Exception ex)
                 {
@@ -74,16 +66,27 @@ namespace GenerateQRcode
 
         void CreateQRCodsFromTxt(string LargTxt)
         {
-            ResultImage = null;
-            Filename = $"QR_CODE_{DateTime.Now.ToString("yyyyddMM_HHmmss", null)}.bmp";
+            try
+            {
+                pictureBoxQR.Image = null;
+               Filename = $"QR_CODE_{DateTime.Now.ToString("yyyyddMM_HHmmss", null)}.bmp";
+                var richTextBox = new RichTextBoxDataProvider(LargTxt);
+                IDataProvider dataProvider = richTextBox;
+                IDataProcessor dataProcessor = richTextBox;
 
-            QRCodes qrA4 = new QRCodes();
-            for (int i = 0; i < QRCodes.CNTS_IMAGES_MAX; i++)
-                qrA4.LstQrcodesTxts.Add(new QrTxt(DateTime.Now.ToString("F"), LargTxt));
-            ResultImage = qrA4.QRGenerate();
-
-            if (ResultImage != null)
-                pictureBoxQR.Image = ResultImage;
+                if (dataProcessor.ProcessDataStart(dataProvider))
+                    if (dataProcessor.ProcessCreateQR())
+                        if (richTextBox.ResultImage != null)
+                        {
+                            ResultImage= richTextBox.ResultImage;
+                            pictureBoxQR.Image = ResultImage;
+                        }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                $"Details:\n\n{ex.StackTrace}");
+            }
 
         }
 

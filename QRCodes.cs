@@ -100,12 +100,10 @@ namespace GenerateQRcode
     {
         public QrTxt(string signatures, string txt)
         {
-            //Fname = fname;
             Signatures = signatures;
             LargeText = txt;
         }
 
-        //public string Fname { get; private set; }
         public string Signatures { get; private set; }
         public string LargeText { get; private set; }
 

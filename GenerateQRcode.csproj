@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataStructureEntity.cs" />
+    <Compile Include="DataStructureQR.cs" />
     <Compile Include="FormQR.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,8 +62,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QRCodes.cs" />
-    <Compile Include="QRDataProcessor.cs" />
-    <Compile Include="TxtCSVDataProvider.cs" />
+    <Compile Include="CSVDataProvider.cs" />
+    <Compile Include="RichTextBoxDataProvider.cs" />
     <EmbeddedResource Include="FormQR.resx">
       <DependentUpon>FormQR.cs</DependentUpon>
     </EmbeddedResource>
