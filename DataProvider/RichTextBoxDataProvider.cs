@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace GenerateQRcode
@@ -22,13 +23,26 @@ namespace GenerateQRcode
             return true;
         }
 
-        public bool ProcessCreateQR()
+        public List<DataStructureQR> ProcessCreateQR()
         {
+            Bitmap resultImage;
+            string filename;
+            var LstStructureQRs = new List<DataStructureQR>();
             QRCodes qrA4 = new QRCodes();
             for (int i = 0; i < QRCodes.CNTS_IMAGES_MAX; i++)
                 qrA4.LstQrcodesTxts.Add(new QrTxt(DateTime.Now.ToString("F"), LargTxt));
-            ResultImage = qrA4.QRGenerate();
-            return true;
+            resultImage = qrA4.QRGenerate();
+            if (resultImage != null)
+            {
+                filename = $"QR_CODE_{DateTime.Now.ToString("yyyyddMM_HHmmss_fff", null)}.bmp";
+                LstStructureQRs.Add(new DataStructureQR
+                {
+                    Filename = filename,
+                    ResultImage = resultImage
+                });
+            }
+
+            return LstStructureQRs;
         }
 
         public bool ProcessDataStart(IDataProvider dataProvider)

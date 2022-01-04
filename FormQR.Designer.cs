@@ -31,7 +31,6 @@
             this.buttonQRcreate = new System.Windows.Forms.Button();
             this.pictureBoxQR = new System.Windows.Forms.PictureBox();
             this.richTextBoxStrinfForQR = new System.Windows.Forms.RichTextBox();
-            this.buttonSaveQR = new System.Windows.Forms.Button();
             this.groupBoxForPictureBox = new System.Windows.Forms.GroupBox();
             this.buttonLoadFromFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQR)).BeginInit();
@@ -67,17 +66,6 @@
             this.richTextBoxStrinfForQR.TabIndex = 3;
             this.richTextBoxStrinfForQR.Text = "";
             // 
-            // buttonSaveQR
-            // 
-            this.buttonSaveQR.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonSaveQR.Location = new System.Drawing.Point(759, 363);
-            this.buttonSaveQR.Name = "buttonSaveQR";
-            this.buttonSaveQR.Size = new System.Drawing.Size(163, 57);
-            this.buttonSaveQR.TabIndex = 4;
-            this.buttonSaveQR.Text = "Сохранить QR";
-            this.buttonSaveQR.UseVisualStyleBackColor = true;
-            this.buttonSaveQR.Click += new System.EventHandler(this.buttonSaveQR_Click);
-            // 
             // groupBoxForPictureBox
             // 
             this.groupBoxForPictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -109,7 +97,6 @@
             this.ClientSize = new System.Drawing.Size(934, 590);
             this.Controls.Add(this.buttonLoadFromFile);
             this.Controls.Add(this.groupBoxForPictureBox);
-            this.Controls.Add(this.buttonSaveQR);
             this.Controls.Add(this.richTextBoxStrinfForQR);
             this.Controls.Add(this.buttonQRcreate);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -127,7 +114,6 @@
         private System.Windows.Forms.Button buttonQRcreate;
         private System.Windows.Forms.PictureBox pictureBoxQR;
         private System.Windows.Forms.RichTextBox richTextBoxStrinfForQR;
-        private System.Windows.Forms.Button buttonSaveQR;
         private System.Windows.Forms.GroupBox groupBoxForPictureBox;
         private System.Windows.Forms.Button buttonLoadFromFile;
     }

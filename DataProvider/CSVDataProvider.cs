@@ -13,7 +13,7 @@ namespace GenerateQRcode
         string PathFile { get; set; }
         public List<string> LstStringData { get; set; } = new List<string>();
         public List<DataStructureEntity> LstParsingData { get; private set; } = new List<DataStructureEntity>();
-        public List<DataStructureQR> LstStructureQRs { get; private set; }= new List<DataStructureQR>();
+       // public List<DataStructureQR> LstStructureQRs { get; private set; }= new List<DataStructureQR>();
 
 
         public CSVDataProvider(string PathFile)
@@ -71,9 +71,9 @@ namespace GenerateQRcode
             return true;
         }
 
-        bool IDataProcessor.ProcessCreateQR()
+        List<DataStructureQR> IDataProcessor.ProcessCreateQR()
         {
-            LstStructureQRs.Clear();
+            var LstStructureQRs = new List<DataStructureQR>();
             var queueRows = new Queue<DataStructureEntity>();
             foreach (var v in LstParsingData)
                 queueRows.Enqueue(v);
@@ -118,7 +118,7 @@ namespace GenerateQRcode
                 }
             }
 
-            return true;
+            return LstStructureQRs;
         }
 
         public bool ProcessDataStart(IDataProvider dataProvider)
