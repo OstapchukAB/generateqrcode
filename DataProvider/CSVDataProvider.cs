@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace GenerateQRcode
 {
@@ -71,7 +72,7 @@ namespace GenerateQRcode
             return true;
         }
 
-        List<DataStructureQR> IDataProcessor.ProcessCreateQR()
+        List<DataStructureQR> IDataProcessor.ProcessCreateQR(FormQR frm)
         {
             var LstStructureQRs = new List<DataStructureQR>();
             var queueRows = new Queue<DataStructureEntity>();
@@ -83,6 +84,13 @@ namespace GenerateQRcode
             string filename;
 
             //прочтем всю очередь по 12 подходов или пока очередь не закончится
+
+            var cnts = queueRows.Count;
+            var step = QRCodes.CNTS_IMAGES_MAX;
+            var maxProgress = cnts;
+            
+            var current = 0;
+            Progress(current,frm);
             while (queueRows.Count > 0)
             {
 
@@ -104,9 +112,16 @@ namespace GenerateQRcode
                         );
                     qrA4.LstQrcodesTxts.Add(new QrTxt(_row.Article, text));
                 }
+
                 resultImage = qrA4.QRGenerate();
                 if (resultImage != null)
                 {
+                    current = step +current;
+                    //maxProgress = queueRows.Count;
+                    var results = current * 100 / maxProgress;
+                    if (maxProgress!=0)
+                    Progress((int)(results),frm);
+                    
                     //pictureBoxQR.Image = ResultImage;
                     filename = $"QR_CODE_{DateTime.Now.ToString("yyyyddMM_HHmmss_fff", null)}.bmp";
                     //ResultImage.Save(Filename);
@@ -136,7 +151,12 @@ namespace GenerateQRcode
             }
         }
 
-       
+        public void Progress(int count,FormQR frm)
+        {
+            frm.Progress(count,100);
+        }
+
+      
     }
 
 

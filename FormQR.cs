@@ -29,7 +29,9 @@ namespace GenerateQRcode
 
         private void buttonLoadFromFile_Click(object sender, EventArgs e)
         {
+           
             OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = "Image Files (CSV)|*.csv;";
             if (openFile.ShowDialog() == DialogResult.OK)
             {
                 var csv = new CSVDataProvider(openFile.FileName);
@@ -39,6 +41,8 @@ namespace GenerateQRcode
 
         async void CreateQRCods(IDataProvider _dataProvider, IDataProcessor _dataProcessor)
         {
+           // progressBar1.Minimum = 0;
+           // progressBar1.Maximum = 100;
             await Task.Run(() =>
                 {
                     try
@@ -50,17 +54,17 @@ namespace GenerateQRcode
                             if (dataProvider.GetData())
                                 if (dataProvider.ParsingData())
                                 {
-                                    var LstQR = dataProcessor.ProcessCreateQR();
-                                    var cnts = LstQR.Count;
-                                    var j = 0;
-                                    Progress(j);
+                                    var LstQR = dataProcessor.ProcessCreateQR(this);
+                                    //var cnts = LstQR.Count;
+                                    //var j = 0;
+                                    //Progress(j);
 
                                     if (LstQR != null)
                                         foreach (var dt in LstQR)
                                         {
-                                            j++;
+                                            //j++;
                                             dt.ResultImage.Save(dt.Filename);
-                                            Progress((int)(j * 100 / cnts));
+                                           // Progress((int)(j * 100 / cnts));
                                             
                                             PictureBoxQR(dt.ResultImage);
                                         }
@@ -80,7 +84,7 @@ namespace GenerateQRcode
         private void FormQR_Load(object sender, EventArgs e)
         {
             progressBar1.Minimum = 0;
-            progressBar1.Maximum = 100;
+            //progressBar1.Maximum = 100;
         }
 
         private void PictureBoxQR(Bitmap bitmap)
@@ -95,10 +99,11 @@ namespace GenerateQRcode
                 action();
         }
 
-        private void Progress(int v)
+        public void Progress(int v,int max)
         {
             Action action = () =>
             {
+                progressBar1.Maximum = max;
                 progressBar1.Value = v;
                 labelProgressBar.Text = v.ToString() + "%";
                 //labelProgressText.Text = s;
@@ -108,11 +113,5 @@ namespace GenerateQRcode
             else
                 action();
         }
-
-
-
-
     }
-
-
 }

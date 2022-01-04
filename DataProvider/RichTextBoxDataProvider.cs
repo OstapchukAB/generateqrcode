@@ -23,7 +23,7 @@ namespace GenerateQRcode
             return true;
         }
 
-        public List<DataStructureQR> ProcessCreateQR()
+        public List<DataStructureQR> ProcessCreateQR(FormQR frm)
         {
             Bitmap resultImage;
             string filename;
@@ -63,6 +63,11 @@ namespace GenerateQRcode
         public bool SourceDataProviderReady()
         {
            return LargTxt != null && LargTxt.Length>0;
+        }
+
+        public void Progress(int count, FormQR frm)
+        {
+            throw new NotImplementedException();
         }
     }
 }
