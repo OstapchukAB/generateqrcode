@@ -46,19 +46,23 @@ namespace GenerateQRcode
 
 
             var lststringData = LstStringData.Select(x => Regex.Split(x.Replace("\"", "'"), patern));
+            
             //List<DataStructureEntity> data = new List<DataStructureEntity>();
             foreach (var columns in lststringData)
             {
+                
+                
                 LstParsingData.Add(new DataStructureEntity
                 {
 
-                    Article = columns[0],
-                    Group = columns[1],
-                    Provider = columns[2],
-                    Model = columns[3],
-                    SN = columns[4],
-                    IN = columns[5],
-                    Owner = columns[6],
+                    Article = $"Article: {columns[0]}",
+                    Group = $"Group: {columns[1].Replace("\'","")}",
+                    Vendor= $"Vendor: {columns[2]}",
+                    Provider = $"Provider: {columns[3].Replace("\'", "")}",
+                    Model = $"Model: {columns[4].Replace("\'", "")}",
+                    SN = $"SN: {columns[5].Replace("\'", "")}",
+                    IN = $"IN: {columns[6].Replace("\'", "")}",
+                    Owner = $"Owner: {columns[7].Replace("\'", "")}",
                     Date = DateTime.Now.ToString("D"),
 
                 });
@@ -90,6 +94,7 @@ namespace GenerateQRcode
                         .Join("\n",
                                   _row.Article,
                                   _row.Group,
+                                  _row.Vendor,
                                   _row.Model,
                                   _row.SN,
                                   _row.IN,

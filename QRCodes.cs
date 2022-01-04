@@ -13,11 +13,11 @@ namespace GenerateQRcode
         const int WITH_BITMAP = 550;
         const int HEIGH_BITMAP = 550;
         const int DELTA_IMAGES = 100;
-        const int DELTA_X_SIGNATURES = 60;
-        const int DELTA_Y_SIGNATURES = HEIGH_BITMAP-40;
+        const int DELTA_X_SIGNATURES = 40;
+        const int DELTA_Y_SIGNATURES = HEIGH_BITMAP-30;
         const int WITH_SIGNATURES = WITH_BITMAP;
-        const int HEIGH_SIGNATURES = 60;
-        const int SIZE_SIGNATURES = 30;
+        const int HEIGH_SIGNATURES = 50;
+        const int SIZE_SIGNATURES = 25;
         const int PAGE_WITH = 2100;
         const int PAGE_HEIGH = 2970;
         const int IMAGES_CNTS_FOR_HEIGH = 4;
