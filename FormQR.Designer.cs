@@ -33,6 +33,8 @@
             this.richTextBoxStrinfForQR = new System.Windows.Forms.RichTextBox();
             this.groupBoxForPictureBox = new System.Windows.Forms.GroupBox();
             this.buttonLoadFromFile = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.labelProgressBar = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQR)).BeginInit();
             this.groupBoxForPictureBox.SuspendLayout();
             this.SuspendLayout();
@@ -90,11 +92,29 @@
             this.buttonLoadFromFile.UseVisualStyleBackColor = true;
             this.buttonLoadFromFile.Click += new System.EventHandler(this.buttonLoadFromFile_Click);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(14, 555);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(477, 23);
+            this.progressBar1.TabIndex = 7;
+            // 
+            // labelProgressBar
+            // 
+            this.labelProgressBar.AutoSize = true;
+            this.labelProgressBar.Location = new System.Drawing.Point(517, 555);
+            this.labelProgressBar.Name = "labelProgressBar";
+            this.labelProgressBar.Size = new System.Drawing.Size(14, 20);
+            this.labelProgressBar.TabIndex = 8;
+            this.labelProgressBar.Text = "-";
+            // 
             // FormQR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(934, 590);
+            this.Controls.Add(this.labelProgressBar);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.buttonLoadFromFile);
             this.Controls.Add(this.groupBoxForPictureBox);
             this.Controls.Add(this.richTextBoxStrinfForQR);
@@ -107,6 +127,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxQR)).EndInit();
             this.groupBoxForPictureBox.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -116,6 +137,8 @@
         private System.Windows.Forms.RichTextBox richTextBoxStrinfForQR;
         private System.Windows.Forms.GroupBox groupBoxForPictureBox;
         private System.Windows.Forms.Button buttonLoadFromFile;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Label labelProgressBar;
     }
 }
 

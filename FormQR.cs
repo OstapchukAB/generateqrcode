@@ -42,29 +42,36 @@ namespace GenerateQRcode
             await Task.Run(() =>
                 {
                     try
-                        {
-                            IDataProvider dataProvider = _dataProvider;
-                            IDataProcessor dataProcessor = _dataProcessor;
+                    {
+                        IDataProvider dataProvider = _dataProvider;
+                        IDataProcessor dataProcessor = _dataProcessor;
 
-                            if (dataProcessor.ProcessDataStart(dataProvider))
-                                if (dataProvider.GetData())
-                                    if (dataProvider.ParsingData())
-                                    {
-                                        var LstQR = dataProcessor.ProcessCreateQR();
-                                        if (LstQR != null)
-                                            foreach (var dt in LstQR)
-                                            {
-                                                dt.ResultImage.Save(dt.Filename);
-                                                PictureBoxQR(dt.ResultImage);
-                                            }
-                                    }
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
-                            $"Details:\n\n{ex.StackTrace}");
-                        }
-            });
+                        if (dataProcessor.ProcessDataStart(dataProvider))
+                            if (dataProvider.GetData())
+                                if (dataProvider.ParsingData())
+                                {
+                                    var LstQR = dataProcessor.ProcessCreateQR();
+                                    var cnts = LstQR.Count;
+                                    var j = 0;
+                                    Progress(j);
+
+                                    if (LstQR != null)
+                                        foreach (var dt in LstQR)
+                                        {
+                                            j++;
+                                            dt.ResultImage.Save(dt.Filename);
+                                            Progress((int)(j * 100 / cnts));
+                                            
+                                            PictureBoxQR(dt.ResultImage);
+                                        }
+                                }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                        $"Details:\n\n{ex.StackTrace}");
+                    }
+                });
             MessageBox.Show("Завершено!");
         }
 
@@ -72,7 +79,8 @@ namespace GenerateQRcode
 
         private void FormQR_Load(object sender, EventArgs e)
         {
-
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = 100;
         }
 
         private void PictureBoxQR(Bitmap bitmap)
@@ -86,6 +94,22 @@ namespace GenerateQRcode
             else
                 action();
         }
+
+        private void Progress(int v)
+        {
+            Action action = () =>
+            {
+                progressBar1.Value = v;
+                labelProgressBar.Text = v.ToString() + "%";
+                //labelProgressText.Text = s;
+            };
+            if (InvokeRequired)
+                BeginInvoke(action);
+            else
+                action();
+        }
+
+
 
 
     }
