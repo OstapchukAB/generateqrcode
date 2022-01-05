@@ -8,18 +8,21 @@ using System.Windows.Forms;
 
 namespace GenerateQRcode
 {
-    class CSVDataProvider : IDataProvider, IDataProcessor
+    class CSVDataProvider : IDataProvider, IDataProcessor, IProgressBarGUI
 
     {
         string PathFile { get; set; }
+
+        readonly FormQR frm;
         public List<string> LstStringData { get; set; } = new List<string>();
         public List<DataStructureEntity> LstParsingData { get; private set; } = new List<DataStructureEntity>();
        // public List<DataStructureQR> LstStructureQRs { get; private set; }= new List<DataStructureQR>();
 
 
-        public CSVDataProvider(string PathFile)
+        public CSVDataProvider(string PathFile,Form form)
         {
             this.PathFile = PathFile;
+            this.frm =(FormQR) form;
 
         }
 
@@ -51,7 +54,8 @@ namespace GenerateQRcode
             //List<DataStructureEntity> data = new List<DataStructureEntity>();
             foreach (var columns in lststringData)
             {
-                
+                if(columns.Count()!=8)
+                    return false;
                 
                 LstParsingData.Add(new DataStructureEntity
                 {
@@ -72,7 +76,7 @@ namespace GenerateQRcode
             return true;
         }
 
-        List<DataStructureQR> IDataProcessor.ProcessCreateQR(FormQR frm)
+        List<DataStructureQR> IDataProcessor.ProcessCreateQR()
         {
             var LstStructureQRs = new List<DataStructureQR>();
             var queueRows = new Queue<DataStructureEntity>();
@@ -90,7 +94,7 @@ namespace GenerateQRcode
             var maxProgress = cnts;
             
             var current = 0;
-            Progress(current,frm);
+            Progress(current);
             while (queueRows.Count > 0)
             {
 
@@ -120,7 +124,7 @@ namespace GenerateQRcode
                     //maxProgress = queueRows.Count;
                     var results = current * 100 / maxProgress;
                     if (maxProgress!=0)
-                    Progress((int)(results),frm);
+                    Progress((int)(results));
                     
                     //pictureBoxQR.Image = ResultImage;
                     filename = $"QR_CODE_{DateTime.Now.ToString("yyyyddMM_HHmmss_fff", null)}.bmp";
@@ -151,8 +155,9 @@ namespace GenerateQRcode
             }
         }
 
-        public void Progress(int count,FormQR frm)
+        public void Progress(int count)
         {
+           // FormQR frm = (FormQR)form;
             frm.Progress(count,100);
         }
 

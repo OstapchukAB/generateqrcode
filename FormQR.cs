@@ -29,20 +29,20 @@ namespace GenerateQRcode
 
         private void buttonLoadFromFile_Click(object sender, EventArgs e)
         {
-           
+
             OpenFileDialog openFile = new OpenFileDialog();
             openFile.Filter = "Image Files (CSV)|*.csv;";
             if (openFile.ShowDialog() == DialogResult.OK)
             {
-                var csv = new CSVDataProvider(openFile.FileName);
+                var csv = new CSVDataProvider(openFile.FileName, this);
                 CreateQRCods(csv, csv);
             }
         }
 
         async void CreateQRCods(IDataProvider _dataProvider, IDataProcessor _dataProcessor)
         {
-           // progressBar1.Minimum = 0;
-           // progressBar1.Maximum = 100;
+            // progressBar1.Minimum = 0;
+            // progressBar1.Maximum = 100;
             await Task.Run(() =>
                 {
                     try
@@ -54,7 +54,7 @@ namespace GenerateQRcode
                             if (dataProvider.GetData())
                                 if (dataProvider.ParsingData())
                                 {
-                                    var LstQR = dataProcessor.ProcessCreateQR(this);
+                                    var LstQR = dataProcessor.ProcessCreateQR();
                                     //var cnts = LstQR.Count;
                                     //var j = 0;
                                     //Progress(j);
@@ -64,11 +64,16 @@ namespace GenerateQRcode
                                         {
                                             //j++;
                                             dt.ResultImage.Save(dt.Filename);
-                                           // Progress((int)(j * 100 / cnts));
-                                            
+                                            // Progress((int)(j * 100 / cnts));
+
                                             PictureBoxQR(dt.ResultImage);
                                         }
                                 }
+                                else
+                                {
+                                    MessageBox.Show("Проблема с парсингом файла!\nПроверьте структуру файла","",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                                }
+
                     }
                     catch (Exception ex)
                     {
@@ -83,7 +88,7 @@ namespace GenerateQRcode
 
         private void FormQR_Load(object sender, EventArgs e)
         {
-            progressBar1.Minimum = 0;
+            // progressBar1.Minimum = 0;
             //progressBar1.Maximum = 100;
         }
 
@@ -99,10 +104,11 @@ namespace GenerateQRcode
                 action();
         }
 
-        public void Progress(int v,int max)
+        public void Progress(int v, int max)
         {
             Action action = () =>
             {
+                progressBar1.Minimum = 0;
                 progressBar1.Maximum = max;
                 progressBar1.Value = v;
                 labelProgressBar.Text = v.ToString() + "%";
