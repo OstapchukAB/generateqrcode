@@ -41,46 +41,42 @@ namespace GenerateQRcode
 
         async void CreateQRCods(IDataProvider _dataProvider, IDataProcessor _dataProcessor)
         {
-            // progressBar1.Minimum = 0;
-            // progressBar1.Maximum = 100;
             await Task.Run(() =>
+            {
+                try
                 {
-                    try
+                    IDataProvider dataProvider = _dataProvider;
+                    IDataProcessor dataProcessor = _dataProcessor;
+
+                    if (!dataProcessor.ProcessDataStart(dataProvider))
                     {
-                        IDataProvider dataProvider = _dataProvider;
-                        IDataProcessor dataProcessor = _dataProcessor;
-
-                        if (dataProcessor.ProcessDataStart(dataProvider))
-                            if (dataProvider.GetData())
-                                if (dataProvider.ParsingData())
-                                {
-                                    var LstQR = dataProcessor.ProcessCreateQR();
-                                    //var cnts = LstQR.Count;
-                                    //var j = 0;
-                                    //Progress(j);
-
-                                    if (LstQR != null)
-                                        foreach (var dt in LstQR)
-                                        {
-                                            //j++;
-                                            dt.ResultImage.Save(dt.Filename);
-                                            // Progress((int)(j * 100 / cnts));
-
-                                            PictureBoxQR(dt.ResultImage);
-                                        }
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Проблема с парсингом файла!\nПроверьте структуру файла","",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                                }
-
+                        MessageBox.Show("Проблема с источником данных!\nПроверьте источник данных",
+                            "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
                     }
-                    catch (Exception ex)
+
+                    if (!dataProvider.GetData())
                     {
-                        MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
-                        $"Details:\n\n{ex.StackTrace}");
+                        MessageBox.Show("Проблема с получением данных из источника!",
+                                "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
                     }
-                });
+                    if (!dataProvider.ParsingData())
+                    {
+                        MessageBox.Show("Проблема с парсингом данных!\nПроверьте структуру входных данных",
+                            "", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    dataProcessor.ProcessCreateQR();
+                    //dataProcessor.sa
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Security error.\n\nError message: {ex.Message}\n\n" +
+                    $"Details:\n\n{ex.StackTrace}");
+                }
+            });
+
             MessageBox.Show("Завершено!");
         }
 
@@ -92,7 +88,7 @@ namespace GenerateQRcode
             //progressBar1.Maximum = 100;
         }
 
-        private void PictureBoxQR(Bitmap bitmap)
+        public void PictureBoxQR(Bitmap bitmap)
         {
             Action action = () =>
             {

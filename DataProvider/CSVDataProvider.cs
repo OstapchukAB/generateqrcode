@@ -4,11 +4,12 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace GenerateQRcode
 {
-    class CSVDataProvider : IDataProvider, IDataProcessor, IProgressBarGUI
+    class CSVDataProvider : IDataProvider, IDataProcessor, IFormGUI
 
     {
         string PathFile { get; set; }
@@ -16,13 +17,13 @@ namespace GenerateQRcode
         readonly FormQR frm;
         public List<string> LstStringData { get; set; } = new List<string>();
         public List<DataStructureEntity> LstParsingData { get; private set; } = new List<DataStructureEntity>();
-       // public List<DataStructureQR> LstStructureQRs { get; private set; }= new List<DataStructureQR>();
+        // public List<DataStructureQR> LstStructureQRs { get; private set; }= new List<DataStructureQR>();
 
 
-        public CSVDataProvider(string PathFile,Form form)
+        public CSVDataProvider(string PathFile, Form form)
         {
             this.PathFile = PathFile;
-            this.frm =(FormQR) form;
+            this.frm = (FormQR)form;
 
         }
 
@@ -36,10 +37,10 @@ namespace GenerateQRcode
 
         bool IDataProvider.GetData()
         {
-           LstStringData= File.ReadAllLines(PathFile)
-               .Skip(1)
-               .Where(row => row.Length > 0)
-               .ToList();
+            LstStringData = File.ReadAllLines(PathFile)
+                .Skip(1)
+                .Where(row => row.Length > 0)
+                .ToList();
             return true;
         }
 
@@ -50,19 +51,19 @@ namespace GenerateQRcode
 
 
             var lststringData = LstStringData.Select(x => Regex.Split(x.Replace("\"", "'"), patern));
-            
+
             //List<DataStructureEntity> data = new List<DataStructureEntity>();
             foreach (var columns in lststringData)
             {
-                if(columns.Count()!=8)
+                if (columns.Count() != 8)
                     return false;
-                
+
                 LstParsingData.Add(new DataStructureEntity
                 {
 
                     Article = $"Article: {columns[0]}",
-                    Group = $"Group: {columns[1].Replace("\'","")}",
-                    Vendor= $"Vendor: {columns[2]}",
+                    Group = $"Group: {columns[1].Replace("\'", "")}",
+                    Vendor = $"Vendor: {columns[2]}",
                     Provider = $"Provider: {columns[3].Replace("\'", "")}",
                     Model = $"Model: {columns[4].Replace("\'", "")}",
                     SN = $"SN: {columns[5].Replace("\'", "")}",
@@ -72,13 +73,13 @@ namespace GenerateQRcode
 
                 });
             }
-           // LstParsingData = data;
+            // LstParsingData = data;
             return true;
         }
 
-        List<DataStructureQR> IDataProcessor.ProcessCreateQR()
+        void IDataProcessor.ProcessCreateQR()
         {
-            var LstStructureQRs = new List<DataStructureQR>();
+            var lstStructuresQRs = new List<DataStructureQR>();
             var queueRows = new Queue<DataStructureEntity>();
             foreach (var v in LstParsingData)
                 queueRows.Enqueue(v);
@@ -92,7 +93,7 @@ namespace GenerateQRcode
             var cnts = queueRows.Count;
             var step = QRCodes.CNTS_IMAGES_MAX;
             var maxProgress = cnts;
-            
+
             var current = 0;
             Progress(current);
             while (queueRows.Count > 0)
@@ -120,24 +121,28 @@ namespace GenerateQRcode
                 resultImage = qrA4.QRGenerate();
                 if (resultImage != null)
                 {
-                    current = step +current;
+                    current = step + current;
                     //maxProgress = queueRows.Count;
                     var results = current * 100 / maxProgress;
-                    if (maxProgress!=0)
-                    Progress((int)(results));
-                    
+                    if (maxProgress != 0)
+                        Progress((int)(results));
+                    PictureBoxQR(resultImage);
+
                     //pictureBoxQR.Image = ResultImage;
                     filename = $"QR_CODE_{DateTime.Now.ToString("yyyyddMM_HHmmss_fff", null)}.bmp";
-                    //ResultImage.Save(Filename);
-                    LstStructureQRs.Add(new DataStructureQR
+
+                    
+
+                    // resultImage.Save(filename);
+                    lstStructuresQRs.Add(new DataStructureQR
                     {
                         Filename = filename,
                         ResultImage = resultImage
                     });
                 }
             }
+            ProcessSaveFiles(lstStructuresQRs);
 
-            return LstStructureQRs;
         }
 
         public bool ProcessDataStart(IDataProvider dataProvider)
@@ -157,11 +162,21 @@ namespace GenerateQRcode
 
         public void Progress(int count)
         {
-           // FormQR frm = (FormQR)form;
-            frm.Progress(count,100);
+            // FormQR frm = (FormQR)form;
+            frm.Progress(count, 100);
         }
 
-      
+        public void PictureBoxQR(Bitmap bitmap)
+        {
+            frm.PictureBoxQR(bitmap);
+            //throw new NotImplementedException();
+        }
+
+        public void ProcessSaveFiles(List<DataStructureQR> lstStructuresQRs)
+        {
+            foreach (var ob in lstStructuresQRs)
+                ob.ResultImage.Save(ob.Filename);         
+        }
     }
 
 

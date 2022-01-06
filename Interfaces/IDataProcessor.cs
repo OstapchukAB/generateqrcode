@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 
 namespace GenerateQRcode
 {
@@ -6,6 +7,7 @@ namespace GenerateQRcode
     {
         
         bool ProcessDataStart(IDataProvider dataProvider);
-        List<DataStructureQR> ProcessCreateQR();
+        void ProcessCreateQR();
+        void ProcessSaveFiles(List<DataStructureQR> lstStructuresQRs);
     }
 }

@@ -23,7 +23,7 @@ namespace GenerateQRcode
             return true;
         }
 
-        public List<DataStructureQR> ProcessCreateQR()
+        public void ProcessCreateQR()
         {
             Bitmap resultImage;
             string filename;
@@ -35,14 +35,14 @@ namespace GenerateQRcode
             if (resultImage != null)
             {
                 filename = $"QR_CODE_{DateTime.Now.ToString("yyyyddMM_HHmmss_fff", null)}.bmp";
-                LstStructureQRs.Add(new DataStructureQR
-                {
-                    Filename = filename,
-                    ResultImage = resultImage
-                });
+                //LstStructureQRs.Add(new DataStructureQR
+                //{
+                //    Filename = filename,
+                //    ResultImage = resultImage
+                //});
             }
 
-            return LstStructureQRs;
+            
         }
 
         public bool ProcessDataStart(IDataProvider dataProvider)
@@ -65,6 +65,17 @@ namespace GenerateQRcode
            return LargTxt != null && LargTxt.Length>0;
         }
 
-        
+       
+       
+
+        public void ProcessSaveFiles(Bitmap image, string nameFile)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ProcessSaveFiles(List<DataStructureQR> lstStructuresQRs)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
